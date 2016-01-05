@@ -7,7 +7,9 @@
 //
 
 #import "DefaultSearchViewController.h"
+#import "SearchInfoViewController.h"
 #import "AdditionsMacro.h"
+
 
 @interface DefaultSearchViewController ()
 {
@@ -21,7 +23,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:YES];
-    
+    self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationController.interactivePopGestureRecognizer.delegate = self;  
 }
 
@@ -47,6 +49,7 @@
     [searchView addSubview:_searchBar];
     
 }
+
 - (IBAction)segmengAction:(UISegmentedControl *)sender {
     NSInteger index = sender.selectedSegmentIndex;
     curSelectType = index;
@@ -92,6 +95,14 @@
     return @"历史搜索";
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [_searchBar endEditing:YES];
+    [_searchBar setShowsCancelButton:NO animated:YES];
+    SearchInfoViewController *search = [[SearchInfoViewController alloc] init];
+    [search getSearchListInfoWithType:curSelectType andSearchStr:@""];
+    [self.navigationController pushViewController:search animated:YES];
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
 //    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"defaultSeachCell"];
 //    if (!cell) {
@@ -106,6 +117,7 @@
 //    }
     return cell;
 }
+
 
 #pragma mark - UISearchBarDelegate代理实现
 #pragma mark -
@@ -134,7 +146,15 @@
 }
 
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
-    NSLog(@".....");
+    if (searchBar.text.length==0) {
+        [[[UIAlertView alloc] initWithTitle:@"提示" message:@"请输入搜索条件!" delegate:self cancelButtonTitle:@"知道了" otherButtonTitles:nil, nil] show];
+        return;
+    }
+    [_searchBar setShowsCancelButton:NO animated:YES];
+    [_searchBar endEditing:YES];
+    SearchInfoViewController *search = [[SearchInfoViewController alloc] init];
+    [search getSearchListInfoWithType:curSelectType andSearchStr:searchBar.text];
+    [self.navigationController pushViewController:search animated:YES];
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{

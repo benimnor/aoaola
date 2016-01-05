@@ -10,10 +10,15 @@
 #import "AdditionsMacro.h"
 #import "SearchInfoViewCell.h"
 #import "BBBadgeBarButtonItem.h"
+#import "ProductAboutViewController.h"
+
+#define T_WIDTH1 160
+#define T_WIDTH2 220
 
 @interface SearchInfoViewController ()
 {
     NSInteger curSelectType;
+    NSString *curSearchStr;
 }
 
 @property (nonatomic, strong) UISearchBar *searchBar;
@@ -40,7 +45,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refrushCompareNum) name:kRefrushCompareNum object:nil];
     
     UIButton *customButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    customButton.frame = CGRectMake(15, 0, 44, 30);
+    customButton.frame = CGRectMake(15, -2, 44, 20);
     [customButton addTarget:self action:@selector(showCompareView) forControlEvents:UIControlEventTouchUpInside];
     [customButton setTitle:@"对比" forState:UIControlStateNormal];
     customButton.titleLabel.font = [UIFont systemFontOfSize:15];
@@ -73,7 +78,11 @@
 }
 
 - (void)showCompareView{
-    
+    ProductAboutViewController *about = [[ProductAboutViewController alloc] initWithNibName:@"ProductAboutViewController" bundle:nil];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] init];
+    backItem.title = @"";
+    self.navigationItem.backBarButtonItem = backItem;
+    [self.navigationController pushViewController:about animated:YES];
 }
 
 - (void)refrushCompareNum{
@@ -84,7 +93,12 @@
         _searchBar.frame = CGRectMake(0, 0, SCREEN_WIDTH-30, 44);
     }else{
         self.navigationItem.rightBarButtonItem = _compareBtn;
-        _searchBar.frame = CGRectMake(0, 0, SCREEN_WIDTH-70, 44);
+        if (_searchBar.showsCancelButton) {
+            _searchBar.frame = CGRectMake(0, 0, SCREEN_WIDTH-30-T_WIDTH1*kScaleSize, 44);
+        }else{
+            _searchBar.frame = CGRectMake(0, 0, SCREEN_WIDTH-30-T_WIDTH2*kScaleSize, 44);
+        }
+        
         _compareBtn.badgeValue = [NSString stringWithFormat:@"%d",count];
     }
 }
@@ -92,12 +106,16 @@
 - (IBAction)segmengAction:(UISegmentedControl *)sender {
     NSInteger index = sender.selectedSegmentIndex;
     curSelectType = index;
-    [self getSearchListInfo];
+    [self getsearchList];
 }
 
 #pragma mark - 网络请求,获取搜索信息列表
 #pragma mark -
-- (void)getSearchListInfo{
+- (void)getsearchList{
+    [self getSearchListInfoWithType:curSelectType andSearchStr:curSearchStr];
+}
+
+- (void)getSearchListInfoWithType:(NSInteger)type andSearchStr:(NSString *)searchStr{
     
 }
 
@@ -138,7 +156,7 @@
 -(BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
     searchBar.showsCancelButton = YES;
     if (LOAD_INTEGER(@"compareCount")!=0) {
-        _searchBar.frame = CGRectMake(0, 0, SCREEN_WIDTH-60, 44);
+        _searchBar.frame = CGRectMake(0, 0, SCREEN_WIDTH-30-T_WIDTH1*kScaleSize, 44);
     }
     
     for (UIView *view in [[searchBar.subviews lastObject] subviews]) {
@@ -162,7 +180,7 @@
     if (LOAD_INTEGER(@"compareCount")==0) {
         _searchBar.frame = CGRectMake(0, 0, SCREEN_WIDTH-30, 44);
     }else{
-        _searchBar.frame = CGRectMake(0, 0, SCREEN_WIDTH-70, 44);
+        _searchBar.frame = CGRectMake(0, 0, SCREEN_WIDTH-30-T_WIDTH2*kScaleSize, 44);
     }
     [searchBar endEditing:YES];
     [searchBar setShowsCancelButton:NO animated:YES];
@@ -172,12 +190,12 @@
     if (LOAD_INTEGER(@"compareCount")==0) {
         _searchBar.frame = CGRectMake(0, 0, SCREEN_WIDTH-30, 44);
     }else{
-        _searchBar.frame = CGRectMake(0, 0, SCREEN_WIDTH-70, 44);
+        _searchBar.frame = CGRectMake(0, 0, SCREEN_WIDTH-30-T_WIDTH2*kScaleSize, 44);
     }
     [searchBar endEditing:YES];
     [searchBar setShowsCancelButton:NO animated:YES];
-    
-    NSLog(@".....");
+    curSearchStr = searchBar.text;
+    [self getsearchList];
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{

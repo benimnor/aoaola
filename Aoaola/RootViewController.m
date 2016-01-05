@@ -50,7 +50,7 @@
 #pragma mark - UISearchBarDelegate代理实现
 #pragma mark -
 -(BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
-    SearchInfoViewController *defaultSearch = [[SearchInfoViewController alloc] init];
+    DefaultSearchViewController *defaultSearch = [[DefaultSearchViewController alloc] init];
     [self.navigationController pushViewController:defaultSearch animated:YES];
 
     

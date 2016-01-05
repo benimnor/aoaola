@@ -10,4 +10,5 @@
 
 @interface SearchInfoViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,UIGestureRecognizerDelegate>
 
+- (void)getSearchListInfoWithType:(NSInteger)type andSearchStr:(NSString *)searchStr;
 @end

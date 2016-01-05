@@ -34,6 +34,7 @@
 #define NSLog(FORMAT, ...) nil
 #endif
 
+#define kScaleSize (SCREEN_WIDTH/1920)
 #define STATUSBARHEIGHT [[UIApplication sharedApplication] statusBarFrame].size.height
 
 #define LOCALIMAGE(filename) [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:filename ofType:nil]]

@@ -35,6 +35,12 @@
 		84C8541B1C365E6400092AD0 /* SearchInfoViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C854191C365E6400092AD0 /* SearchInfoViewCell.m */; };
 		84C8541C1C365E6400092AD0 /* SearchInfoViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C8541A1C365E6400092AD0 /* SearchInfoViewCell.xib */; };
 		84C854201C3AB31400092AD0 /* BBBadgeBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C8541F1C3AB31400092AD0 /* BBBadgeBarButtonItem.m */; };
+		84C854241C3C17CE00092AD0 /* ProductDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C854221C3C17CE00092AD0 /* ProductDetailViewController.m */; };
+		84C854251C3C17CE00092AD0 /* ProductDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C854231C3C17CE00092AD0 /* ProductDetailViewController.xib */; };
+		84C854291C3C185A00092AD0 /* ProductAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C854271C3C185A00092AD0 /* ProductAboutViewController.m */; };
+		84C8542A1C3C185A00092AD0 /* ProductAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C854281C3C185A00092AD0 /* ProductAboutViewController.xib */; };
+		84C8542E1C3C19DF00092AD0 /* ProductAboutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C8542C1C3C19DF00092AD0 /* ProductAboutCell.m */; };
+		84C8542F1C3C19DF00092AD0 /* ProductAboutCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C8542D1C3C19DF00092AD0 /* ProductAboutCell.xib */; };
 		AF4BB774DCE6528B4E732EE9 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CC3D59184CB8AAB673E0BB3 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -112,6 +118,15 @@
 		84C8541A1C365E6400092AD0 /* SearchInfoViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchInfoViewCell.xib; sourceTree = "<group>"; };
 		84C8541E1C3AB31400092AD0 /* BBBadgeBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBBadgeBarButtonItem.h; sourceTree = "<group>"; };
 		84C8541F1C3AB31400092AD0 /* BBBadgeBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBBadgeBarButtonItem.m; sourceTree = "<group>"; };
+		84C854211C3C17CE00092AD0 /* ProductDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductDetailViewController.h; sourceTree = "<group>"; };
+		84C854221C3C17CE00092AD0 /* ProductDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductDetailViewController.m; sourceTree = "<group>"; };
+		84C854231C3C17CE00092AD0 /* ProductDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductDetailViewController.xib; sourceTree = "<group>"; };
+		84C854261C3C185A00092AD0 /* ProductAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductAboutViewController.h; sourceTree = "<group>"; };
+		84C854271C3C185A00092AD0 /* ProductAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductAboutViewController.m; sourceTree = "<group>"; };
+		84C854281C3C185A00092AD0 /* ProductAboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductAboutViewController.xib; sourceTree = "<group>"; };
+		84C8542B1C3C19DF00092AD0 /* ProductAboutCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductAboutCell.h; sourceTree = "<group>"; };
+		84C8542C1C3C19DF00092AD0 /* ProductAboutCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductAboutCell.m; sourceTree = "<group>"; };
+		84C8542D1C3C19DF00092AD0 /* ProductAboutCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductAboutCell.xib; sourceTree = "<group>"; };
 		E31629CD487CBE42B7D71B04 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		F6FFBB9EFF2225C6BBAA7773 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -229,6 +244,12 @@
 				84C854051C33F17600092AD0 /* SearchInfoViewController.h */,
 				84C854061C33F17600092AD0 /* SearchInfoViewController.m */,
 				84C854101C359BBE00092AD0 /* SearchInfoViewController.xib */,
+				84C854261C3C185A00092AD0 /* ProductAboutViewController.h */,
+				84C854271C3C185A00092AD0 /* ProductAboutViewController.m */,
+				84C854281C3C185A00092AD0 /* ProductAboutViewController.xib */,
+				84C854211C3C17CE00092AD0 /* ProductDetailViewController.h */,
+				84C854221C3C17CE00092AD0 /* ProductDetailViewController.m */,
+				84C854231C3C17CE00092AD0 /* ProductDetailViewController.xib */,
 			);
 			name = controllers;
 			sourceTree = "<group>";
@@ -289,6 +310,9 @@
 				84C854181C365E6400092AD0 /* SearchInfoViewCell.h */,
 				84C854191C365E6400092AD0 /* SearchInfoViewCell.m */,
 				84C8541A1C365E6400092AD0 /* SearchInfoViewCell.xib */,
+				84C8542B1C3C19DF00092AD0 /* ProductAboutCell.h */,
+				84C8542C1C3C19DF00092AD0 /* ProductAboutCell.m */,
+				84C8542D1C3C19DF00092AD0 /* ProductAboutCell.xib */,
 			);
 			name = cell;
 			sourceTree = "<group>";
@@ -417,10 +441,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				8414555C1C28228500358DBD /* LaunchScreen.storyboard in Resources */,
+				84C8542F1C3C19DF00092AD0 /* ProductAboutCell.xib in Resources */,
 				841455591C28228500358DBD /* Assets.xcassets in Resources */,
 				84C854111C359BBE00092AD0 /* SearchInfoViewController.xib in Resources */,
+				84C8542A1C3C185A00092AD0 /* ProductAboutViewController.xib in Resources */,
 				84C8540F1C358C5700092AD0 /* DefaultSearchViewController.xib in Resources */,
 				84C8541C1C365E6400092AD0 /* SearchInfoViewCell.xib in Resources */,
+				84C854251C3C17CE00092AD0 /* ProductDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -499,6 +526,7 @@
 				841455AD1C28261800358DBD /* NSString+Additions.m in Sources */,
 				841455AB1C28261800358DBD /* NSDate+Additions.m in Sources */,
 				841455B31C28261800358DBD /* UIImage+Additions.m in Sources */,
+				84C854291C3C185A00092AD0 /* ProductAboutViewController.m in Sources */,
 				841455B41C28261800358DBD /* UIImage+StackBlur.m in Sources */,
 				841455B11C28261800358DBD /* UIColor+Additions.m in Sources */,
 				841455511C28228500358DBD /* AppDelegate.m in Sources */,
@@ -509,7 +537,9 @@
 				841455B21C28261800358DBD /* UIDevice+Additions.m in Sources */,
 				841455AE1C28261800358DBD /* UIAlertView+Additions.m in Sources */,
 				841455B01C28261800358DBD /* UIButton+Additions.m in Sources */,
+				84C8542E1C3C19DF00092AD0 /* ProductAboutCell.m in Sources */,
 				84C8540A1C3407E600092AD0 /* DefaultSearchViewController.m in Sources */,
+				84C854241C3C17CE00092AD0 /* ProductDetailViewController.m in Sources */,
 				84C8541B1C365E6400092AD0 /* SearchInfoViewCell.m in Sources */,
 				8414558A1C2824BB00358DBD /* RootViewController.m in Sources */,
 				841455B51C28261800358DBD /* UIScreen+Additions.m in Sources */,
