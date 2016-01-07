@@ -12,4 +12,5 @@
 
 @interface Utils : NSObject
 
++ (UIView *)addLine:(CGRect)rect superView:(UIView *)view withColor:(UIColor *)color;
 @end

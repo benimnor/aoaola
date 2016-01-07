@@ -7,8 +7,17 @@
 //
 
 #import "Utils.h"
+#import "AdditionsMacro.h"
 
 
 @implementation Utils
+
++ (UIView *)addLine:(CGRect)rect superView:(UIView *)view withColor:(UIColor *)color{
+    UIView *line = [[UIView alloc] initWithFrame:rect];
+    [view addSubview:line];
+    line.backgroundColor = color;
+    
+    return line;
+}
 
 @end
