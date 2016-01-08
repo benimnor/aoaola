@@ -1,28 +1,36 @@
 //
-//  SearchInfoViewCell.m
+//  ProductDetailView.m
 //  Aoaola
 //
-//  Created by Peter on 16/1/1.
+//  Created by Peter on 16/1/8.
 //  Copyright © 2016年 Scofield. All rights reserved.
 //
 
-#import "SearchInfoViewCell.h"
+#import "ProductDetailView.h"
 #import "AdditionsMacro.h"
 
-@implementation SearchInfoViewCell
+@implementation ProductDetailView
+
+-(instancetype)initWithFrame:(CGRect)frame{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.frame = frame;
+    }
+    return self;
+}
 
 - (void)awakeFromNib {
     // Initialization code
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
     
 }
-
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
 }
+*/
+
 - (IBAction)compareAction:(UIButton *)sender {
     NSInteger count = LOAD_INTEGER(@"compareCount");
     if (sender.isSelected) {
@@ -34,11 +42,5 @@
     }
     SAVE_INTEGER(@"compareCount", count);
     [[NSNotificationCenter defaultCenter] postNotificationName:kRefrushCompareNum object:nil];
-}
-
-- (IBAction)showCompositionView:(id)sender {
-    if (_delegate) {
-        [_delegate showCompositionBtnClicked:self.tag];
-    }
 }
 @end

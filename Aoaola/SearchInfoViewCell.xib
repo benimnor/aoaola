@@ -83,6 +83,9 @@
                                         <include reference="F3V-gD-xRb"/>
                                     </mask>
                                 </variation>
+                                <connections>
+                                    <action selector="showCompositionView:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="q4w-eY-Moo"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Arx-hy-38c">
                                 <rect key="frame" x="200" y="117" width="200" height="35"/>

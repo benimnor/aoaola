@@ -11,13 +11,15 @@
 #import "SearchInfoViewCell.h"
 #import "BBBadgeBarButtonItem.h"
 #import "ProductAboutViewController.h"
+#import "ProductDetailViewController.h"
+#import "CompareProductViewController.h"
 #import "Utils.h"
 
 #define T_WIDTH1 160
 #define T_WIDTH2 220
 #define COM_CELL_HEIGHT 44
 
-@interface SearchInfoViewController ()
+@interface SearchInfoViewController ()<SearchInfoCellBtnClickedDelegate>
 {
     NSInteger curSelectType;
     NSString *curSearchStr;
@@ -89,7 +91,11 @@
 }
 
 - (void)showCompareView{
-   
+    CompareProductViewController *compareView  = [[CompareProductViewController alloc] initWithNibName:@"CompareProductViewController" bundle:nil];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] init];
+    backItem.title = @"";
+    self.navigationItem.backBarButtonItem = backItem;
+    [self.navigationController pushViewController:compareView animated:YES];
 }
 
 - (void)refrushCompareNum{
@@ -266,6 +272,7 @@
             cell=[tableView dequeueReusableCellWithIdentifier:cellId];
         }
         cell.tag = indexPath.row;
+        cell.delegate = self;
         cell.titleLabel.text = @"珂润润浸保湿滋养乳霜珂润润浸保湿滋养乳霜";
         cell.titleLabel.adjustsFontSizeToFitWidth = YES;
         cell.functionLabel.text = @"保湿  抗氧化";
@@ -281,6 +288,15 @@
     backItem.title = @"";
     self.navigationItem.backBarButtonItem = backItem;
     [self.navigationController pushViewController:about animated:YES];
+}
+
+-(void)showCompositionBtnClicked:(NSInteger)tag{
+    ProductDetailViewController *detail  = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:nil];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] init];
+    backItem.title = @"";
+    self.navigationItem.backBarButtonItem = backItem;
+    [self.navigationController pushViewController:detail animated:YES];
+
 }
 
 

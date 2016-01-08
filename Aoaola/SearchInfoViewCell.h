@@ -8,15 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol CellCompareDelegate
+
+
+@protocol SearchInfoCellBtnClickedDelegate
 
 @optional
 
 /*
  *  添加对比按钮回调
  */
-- (void)compareBtnClicked:(UIButton*) sender;
-
+- (void)compareBtnClicked:(NSInteger) tag;
+/*
+ *  添加查看成分按钮回调
+ */
+- (void)showCompositionBtnClicked:(NSInteger) tag;
 @end
 
 
@@ -35,4 +40,6 @@
 
 @property (strong, nonatomic) IBOutlet UIButton *detailBtn;
 @property (strong, nonatomic) IBOutlet UIButton *compareBtn;
+
+@property (weak,nonatomic) id <SearchInfoCellBtnClickedDelegate> delegate;
 @end
