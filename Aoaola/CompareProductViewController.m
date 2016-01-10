@@ -10,20 +10,17 @@
 #import "AdditionsMacro.h"
 #import "Utils.h"
 
+#define kDefaultCellHeight 40
 #define kTableWidth 40
+#define kValueTableWidth 100
 
 @interface CompareProductViewController () <UITableViewDelegate,
-                                            UITableViewDataSource,
-                                            UICollectionViewDelegate,
-                                            UICollectionViewDataSource,
-                                            UICollectionViewDelegateFlowLayout>
+                                            UITableViewDataSource>
 
 {
     NSArray *titleArr;
 }
-
-@property (nonatomic, strong) UITableView *titleTableView;
-@property (nonatomic, strong) UICollectionView *valueCollectionView;
+@property (nonatomic, strong) UIScrollView *scrollView;
 @end
 
 @implementation CompareProductViewController
@@ -38,24 +35,25 @@
     
     titleArr = [[NSArray alloc] initWithObjects:@"图片",@"名字",@"功效",@"备案",@"危险",@"孕妇\n禁用",@"美白",@"抗老",@"成分", nil];
     
-    _titleTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, NAVIGATIONBAR_HEIGHT+STATUSBARHEIGHT, kTableWidth, SCREEN_HEIGHT-NAVIGATIONBAR_HEIGHT+STATUSBARHEIGHT) style:UITableViewStylePlain];
-    _titleTableView.delegate = self;
-    _titleTableView.dataSource = self;
-    _titleTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.view addSubview:_titleTableView];
+    UITableView *titleTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, NAVIGATIONBAR_HEIGHT+STATUSBARHEIGHT, kTableWidth, SCREEN_HEIGHT-NAVIGATIONBAR_HEIGHT+STATUSBARHEIGHT) style:UITableViewStylePlain];
+    titleTableView.delegate = self;
+    titleTableView.dataSource = self;
+    titleTableView.tag = 100;
+    titleTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:titleTableView];
     
-    UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc] init];
-    [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    flowLayout.minimumInteritemSpacing = 0;
-    flowLayout.minimumLineSpacing = 0;
-    _valueCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(kTableWidth, NAVIGATIONBAR_HEIGHT+STATUSBARHEIGHT, SCREEN_HEIGHT-kTableWidth, SCREEN_HEIGHT-NAVIGATIONBAR_HEIGHT+STATUSBARHEIGHT) collectionViewLayout:flowLayout];
-    _valueCollectionView.dataSource=self;
-    _valueCollectionView.delegate=self;
-    [_valueCollectionView setBackgroundColor:[UIColor whiteColor]];
+    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(kTableWidth, NAVIGATIONBAR_HEIGHT+STATUSBARHEIGHT, SCREEN_WIDTH-kTableWidth, SCREEN_HEIGHT-NAVIGATIONBAR_HEIGHT+STATUSBARHEIGHT)];
+    _scrollView.contentSize = CGSizeMake(kValueTableWidth*5, SCREEN_HEIGHT-NAVIGATIONBAR_HEIGHT+STATUSBARHEIGHT);
+    [self.view addSubview:_scrollView];
     
-    //注册Cell，必须要有
-    [_valueCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"GradientCell"];
-    [self.view addSubview:_valueCollectionView];
+    for (NSInteger i=1; i<=5; i++) {
+        UITableView *valueTableView = [[UITableView alloc] initWithFrame:CGRectMake(kValueTableWidth*(i-1), 0, kValueTableWidth, SCREEN_HEIGHT-NAVIGATIONBAR_HEIGHT+STATUSBARHEIGHT) style:UITableViewStylePlain];
+        valueTableView.delegate = self;
+        valueTableView.dataSource = self;
+        valueTableView.tag = i;
+        valueTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        [_scrollView addSubview:valueTableView];
+    }
 }
 
 
@@ -71,9 +69,9 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row==0) return 100;
-    if (indexPath.row==8) return 132;
-    return 44;
+    if (indexPath.row==0) return 80;
+    if (indexPath.row==8) return kDefaultCellHeight*3;
+    return kDefaultCellHeight;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -82,59 +80,189 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"titleCell"];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.contentView.backgroundColor = COLOR_APP_LIGHTGRAY;
     
-    CGFloat height = 44;
+    
+    CGFloat height = kDefaultCellHeight;
     if (indexPath.row==0) {
-        height = 100;
+        height = 80;
     }
-    if (indexPath.row==8) {
-        height = 132;
+    if (indexPath.row==8) {//成分行,更具成分个数需要适应高度
+        height = kDefaultCellHeight*3;
     }
     
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kTableWidth, height)];
-    title.text = titleArr[indexPath.row];
-    title.textColor = COLOR_APP_GRAY;
-    title.textAlignment = NSTextAlignmentCenter;
-    title.font = [UIFont systemFontOfSize:11];
-    title.numberOfLines = 2;
-    [cell.contentView addSubview:title];
+    //标题列
+    if (tableView.tag==100) {
+        cell.contentView.backgroundColor = COLOR_APP_WHITE;
+        
+        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kTableWidth, height)];
+        title.text = titleArr[indexPath.row];
+        title.textColor = COLOR_APP_GRAY;
+        title.textAlignment = NSTextAlignmentCenter;
+        title.font = [UIFont systemFontOfSize:11];
+        title.numberOfLines = 2;
+        [cell.contentView addSubview:title];
+        
+        [Utils addLine:CGRectMake(0, height-0.5, kTableWidth, 0.5) superView:cell.contentView withColor:COLOR_APP_LIGHTGRAY];
+        [Utils addLine:CGRectMake(kTableWidth-0.5, 0, 0.5, height) superView:cell.contentView withColor:COLOR_APP_LIGHTGRAY];
+    }else{
+        if (indexPath.row==1) {
+            cell.contentView.backgroundColor = COLOR_APP_WHITE;
+        }else{
+            cell.contentView.backgroundColor = [UIColor whiteColor];
+        }
+        
+        switch (indexPath.row) {
+            case 0://图片
+            {
+                
+                UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, height, height)];
+                image.center = CGPointMake(kValueTableWidth/2, height/2);
+                image.image = [UIImage imageNamed:@"mainproduct_1"];
+                [cell.contentView addSubview:image];
+                
+                UIButton *deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+                deleteBtn.frame = CGRectMake(kValueTableWidth-15-8, 8, 15, 15);
+                [deleteBtn setImage:[UIImage imageNamed:@"compare_deleteBtn"] forState:UIControlStateNormal];
+                deleteBtn.tag = tableView.tag;
+                [deleteBtn addTarget:self action:@selector(deleteTable:) forControlEvents:UIControlEventTouchUpInside];
+                [cell.contentView addSubview:deleteBtn];
+            }
+                break;
+            case 1://产品名称
+            {
+                UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, kValueTableWidth-20, height)];
+                title.text = @"珂润润浸保湿滋养乳霜";
+                title.textAlignment = NSTextAlignmentCenter;
+                title.font = [UIFont systemFontOfSize:11];
+                title.numberOfLines = 2;
+                [cell.contentView addSubview:title];
+                
+            }
+                break;
+            case 2://功效
+            {
+                UILabel *fun = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kValueTableWidth, height)];
+                fun.text = @"保湿  抗氧化";
+                fun.textColor = COLOR_APP_GRAY;
+                fun.textAlignment = NSTextAlignmentCenter;
+                fun.font = [UIFont systemFontOfSize:11];
+                fun.numberOfLines = 2;
+                [cell.contentView addSubview:fun];
+            }
+                break;
+            case 3://备案
+            {
+                UILabel *level = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kValueTableWidth, height)];
+                level.text = @"国产备案";
+                level.textColor = COLOR_APP_PINK;
+                level.textAlignment = NSTextAlignmentCenter;
+                level.font = [UIFont systemFontOfSize:11];
+                level.numberOfLines = 2;
+                [cell.contentView addSubview:level];
+            }
+                break;
+            case 4://危险
+            {
+                UILabel *warning = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kValueTableWidth, height)];
+                warning.text = @"4.9";
+                warning.textColor = COLOR_APP_RED;
+                warning.textAlignment = NSTextAlignmentCenter;
+                warning.font = [UIFont systemFontOfSize:11];
+                warning.numberOfLines = 2;
+                [cell.contentView addSubview:warning];
+            }
+                break;
+            case 5://孕妇禁用
+            {
+                UILabel *yunfu = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kValueTableWidth, height)];
+                yunfu.text = @"3";
+                yunfu.textColor = COLOR_APP_GREEN;
+                yunfu.textAlignment = NSTextAlignmentCenter;
+                yunfu.font = [UIFont systemFontOfSize:11];
+                yunfu.numberOfLines = 2;
+                [cell.contentView addSubview:yunfu];
+            }
+                break;
+            case 6://美白
+            {
+                UILabel *meibai = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kValueTableWidth, height)];
+                meibai.text = @"3";
+                meibai.textColor = COLOR_APP_GREEN;
+                meibai.textAlignment = NSTextAlignmentCenter;
+                meibai.font = [UIFont systemFontOfSize:11];
+                meibai.numberOfLines = 2;
+                [cell.contentView addSubview:meibai];
+            }
+                break;
+            case 7://抗老
+            {
+                UILabel *kanglao = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kValueTableWidth, height)];
+                kanglao.text = @"3";
+                kanglao.textColor = COLOR_APP_GREEN;
+                kanglao.textAlignment = NSTextAlignmentCenter;
+                kanglao.font = [UIFont systemFontOfSize:11];
+                kanglao.numberOfLines = 2;
+                [cell.contentView addSubview:kanglao];
+            }
+                break;
+            case 8://成分
+            {
+                for (NSInteger i=0; i<3; i++) {
+                    UILabel *kanglao = [[UILabel alloc] initWithFrame:CGRectMake(10, kDefaultCellHeight*i, kValueTableWidth-20, kDefaultCellHeight)];
+                    kanglao.text = @"山梨坦倍半异硬脂酸酯";
+                    kanglao.textAlignment = NSTextAlignmentCenter;
+                    kanglao.font = [UIFont systemFontOfSize:10];
+                    kanglao.numberOfLines = 3;
+                    [cell.contentView addSubview:kanglao];
+                    
+                    [Utils addLine:CGRectMake(0, kDefaultCellHeight*(i+1)-0.5, kValueTableWidth, 0.5) superView:cell.contentView withColor:COLOR_APP_LIGHTGRAY];
+                }
+            }
+                break;
+                
+            default:
+                break;
+        }
+        
+        [Utils addLine:CGRectMake(kValueTableWidth-0.5, 0, 0.5, height) superView:cell.contentView withColor:COLOR_APP_LIGHTGRAY];
+        if (tableView.tag==1) {
+            [Utils addLine:CGRectMake(0.5, 0, 0.5, height) superView:cell.contentView withColor:COLOR_APP_LIGHTGRAY];
+        }
+        if (indexPath.row!=8) {
+            [Utils addLine:CGRectMake(0, height-0.5, kValueTableWidth, 0.5) superView:cell.contentView withColor:COLOR_APP_LIGHTGRAY];
+        }
+        
+        
+    }
     
     
-    [Utils addLine:CGRectMake(0, height-0.5, kTableWidth, 0.5) superView:cell.contentView withColor:COLOR_APP_WHITE];
+    
+    
     return cell;
 }
 
 #pragma mark -
-#pragma mark - UICollectionView delegate
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    return 1;
+#pragma mark - 删除其中一个产品table回调处理
+- (void)deleteTable:(UIButton *)sender{
+    [[[UIAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"删除第%ld个table",sender.tag] delegate:self cancelButtonTitle:@"好的" otherButtonTitles:nil, nil] show];
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return 145;
+#pragma mark -
+#pragma mark - table 联动
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.tag!=100) {
+        UITableView *table = (UITableView*)[self.view viewWithTag:100];
+        [table setContentOffset:CGPointMake(0, scrollView.contentOffset.y)];
+    }
+    for (NSInteger i = 1; i <= 5; i++) {
+        if (i!=scrollView.tag) {
+            UITableView *table = (UITableView*)[_scrollView viewWithTag:i];
+            [table setContentOffset:CGPointMake(0, scrollView.contentOffset.y)];
+        }
+    }
 }
 
--(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString * CellIdentifier = @"GradientCell";
-    UICollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    cell.backgroundColor = COLOR(arc4random()%255, arc4random()%255, arc4random()%255, 1);
-    return cell;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return CGSizeMake(44, 44);
-}
-
--(BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return YES;
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
