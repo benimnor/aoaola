@@ -8,6 +8,7 @@
 
 #import "SearchInfoViewCell.h"
 #import "AdditionsMacro.h"
+#import "ProductDetailViewController.h"
 
 @implementation SearchInfoViewCell
 
@@ -24,21 +25,18 @@
     // Configure the view for the selected state
 }
 - (IBAction)compareAction:(UIButton *)sender {
-    NSInteger count = LOAD_INTEGER(@"compareCount");
     if (sender.isSelected) {
         [sender setSelected:NO];
-        count--;
+        [[UIApplication appDelegate].compareDatas removeLastObject];
     }else{
+        [[UIApplication appDelegate].compareDatas addObject:@"1"];
         [sender setSelected:YES];
-        count++;
     }
-    SAVE_INTEGER(@"compareCount", count);
     [[NSNotificationCenter defaultCenter] postNotificationName:kRefrushCompareNum object:nil];
 }
 
 - (IBAction)showCompositionView:(id)sender {
-    if (_delegate) {
-        [_delegate showCompositionBtnClicked:self.tag];
-    }
+    ProductDetailViewController *detail  = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:nil];
+    [(UINavigationController *)[UIApplication appDelegate].window.rootViewController pushViewController:detail animated:YES];
 }
 @end

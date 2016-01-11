@@ -10,4 +10,13 @@
 
 @interface MainViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 
+@property (nonatomic, weak) id delegate;
+
+@end
+
+
+@protocol MainViewDelegate <NSObject>
+
+- (void)didChoiceCate:(NSInteger)index;
+
 @end

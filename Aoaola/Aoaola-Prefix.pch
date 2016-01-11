@@ -1,0 +1,11 @@
+//
+//  Aoaola-Prefix.pch
+//  Aoaola
+//
+//  Created by Johnil on 16/1/11.
+//  Copyright © 2016年 Scofield. All rights reserved.
+//
+
+#ifdef __OBJC__
+#import "AdditionsMacro.h"
+#endif

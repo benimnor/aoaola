@@ -57,7 +57,7 @@
 #define NAVIGATIONBAR_HEIGHT (self.navigationController.navigationBar.height)
 #define CELL_HEIGHT 44
 #define COLOR(r,g,b,a) [UIColor colorWithFullRed:r green:g blue:b alpha:a]
-#define APP_COLOR [UIColor colorWithFullRed:0 green:165 blue:224 alpha:1]
+#define APP_COLOR [UIColor colorWithFullRed:8 green:199 blue:180 alpha:1]
 #define PINK_COLOR [UIColor colorWithFullRed:244 green:71 blue:136 alpha:1]
 #define RED_COLOR [UIColor colorWithFullRed:234 green:102 blue:68 alpha:1]
 #define GRAY_COLOR [UIColor colorWithFullRed:194 green:194 blue:194 alpha:1]
@@ -72,4 +72,4 @@
 #define COLOR_APP_GRAY [UIColor getColor:@"8F8F8F"]
 #define COLOR_APP_LIGHTGRAY [UIColor getColor:@"C6C6C6"]
 
-#define kRefrushCompareNum @"refrushCompareNum"
+#define kRefrushCompareNum @"comparNumDidChanged"
