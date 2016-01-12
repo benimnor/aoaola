@@ -30,6 +30,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *functionLabel;
 @property (strong, nonatomic) IBOutlet UILabel *levelLabel;
+@property (weak, nonatomic) IBOutlet UIView *line;
+@property (weak, nonatomic) IBOutlet UIView *separtorLine;
 
 //@property (strong, nonatomic) NSString *imageUrl;
 //@property (strong, nonatomic) NSString *titleStr;

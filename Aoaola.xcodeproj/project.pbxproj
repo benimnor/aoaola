@@ -46,6 +46,8 @@
 		C420796C1C43C8DA0040AFA9 /* ElementsSearchTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = C420796B1C43C8DA0040AFA9 /* ElementsSearchTableView.m */; };
 		C420796F1C43C9670040AFA9 /* ElementsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C420796E1C43C9670040AFA9 /* ElementsTableViewCell.m */; };
 		C42079721C43D85A0040AFA9 /* AAButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C42079711C43D85A0040AFA9 /* AAButton.m */; };
+		C464D1FC1C4499800067297B /* SearchInfoViewCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = C464D1FB1C4499800067297B /* SearchInfoViewCell2.xib */; };
+		C464D2051C44FA6F0067297B /* CompareProductTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C464D2041C44FA6F0067297B /* CompareProductTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,6 +142,9 @@
 		C420796E1C43C9670040AFA9 /* ElementsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ElementsTableViewCell.m; sourceTree = "<group>"; };
 		C42079701C43D85A0040AFA9 /* AAButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAButton.h; sourceTree = "<group>"; };
 		C42079711C43D85A0040AFA9 /* AAButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAButton.m; sourceTree = "<group>"; };
+		C464D1FB1C4499800067297B /* SearchInfoViewCell2.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchInfoViewCell2.xib; sourceTree = "<group>"; };
+		C464D2031C44FA6F0067297B /* CompareProductTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompareProductTableViewCell.h; sourceTree = "<group>"; };
+		C464D2041C44FA6F0067297B /* CompareProductTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompareProductTableViewCell.m; sourceTree = "<group>"; };
 		E31629CD487CBE42B7D71B04 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		F6FFBB9EFF2225C6BBAA7773 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -321,6 +326,7 @@
 				84C854181C365E6400092AD0 /* SearchInfoViewCell.h */,
 				84C854191C365E6400092AD0 /* SearchInfoViewCell.m */,
 				84C8541A1C365E6400092AD0 /* SearchInfoViewCell.xib */,
+				C464D1FB1C4499800067297B /* SearchInfoViewCell2.xib */,
 				84C8542B1C3C19DF00092AD0 /* ProductAboutCell.h */,
 				84C8542C1C3C19DF00092AD0 /* ProductAboutCell.m */,
 				84C8542D1C3C19DF00092AD0 /* ProductAboutCell.xib */,
@@ -329,6 +335,8 @@
 				84E7E5561C400A9900B15E5A /* ProductDetailView.xib */,
 				C420796D1C43C9670040AFA9 /* ElementsTableViewCell.h */,
 				C420796E1C43C9670040AFA9 /* ElementsTableViewCell.m */,
+				C464D2031C44FA6F0067297B /* CompareProductTableViewCell.h */,
+				C464D2041C44FA6F0067297B /* CompareProductTableViewCell.m */,
 			);
 			name = cell;
 			sourceTree = "<group>";
@@ -469,6 +477,7 @@
 				84E7E5501C3FCFFF00B15E5A /* ProductDetailViewController.xib in Resources */,
 				84E7E55C1C40123D00B15E5A /* CompareProductViewController.xib in Resources */,
 				84C8542A1C3C185A00092AD0 /* ProductAboutViewController.xib in Resources */,
+				C464D1FC1C4499800067297B /* SearchInfoViewCell2.xib in Resources */,
 				84C8541C1C365E6400092AD0 /* SearchInfoViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -569,6 +578,7 @@
 				84C8541B1C365E6400092AD0 /* SearchInfoViewCell.m in Sources */,
 				8414558A1C2824BB00358DBD /* RootViewController.m in Sources */,
 				841455B51C28261800358DBD /* UIScreen+Additions.m in Sources */,
+				C464D2051C44FA6F0067297B /* CompareProductTableViewCell.m in Sources */,
 				8414558F1C28257900358DBD /* MainViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

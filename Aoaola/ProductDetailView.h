@@ -8,12 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProductDetailView : UIView
+@interface ProductDetailView : UITableViewCell
 
-@property (strong, nonatomic) IBOutlet UIImageView *product_img;
-@property (strong, nonatomic) IBOutlet UILabel *product_title;
-@property (strong, nonatomic) IBOutlet UILabel *product_fun;
-@property (strong, nonatomic) IBOutlet UILabel *product_level;
-@property (strong, nonatomic) IBOutlet UILabel *product_com_value;
-@property (strong, nonatomic) IBOutlet UILabel *product_desc;
+@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
+@property (weak, nonatomic) IBOutlet UILabel *descLabel;
+
+
 @end
