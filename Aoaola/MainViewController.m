@@ -12,6 +12,9 @@
 
 #define kImageWidth   SCREEN_WIDTH/3
 #define kImageHeight  SCREEN_WIDTH/3
+
+static NSString *cellIdentifier = @"normalCell";
+
 @interface MainViewController ()
 {
     NSArray *titleStrArr;
@@ -63,6 +66,7 @@
     [headerView addLine:COLOR_APP_WHITE frame:CGRectMake(0, size*2, headerView.width, .5)];
     [headerView addLine:COLOR_APP_WHITE frame:CGRectMake(0, size*3, headerView.width, .5)];
 
+    [_mainTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:cellIdentifier];
     _mainTableView.tableHeaderView = headerView;
 }
 
@@ -84,24 +88,23 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    
     return 4;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return kImageWidth;
+    return kImageWidth*2-20;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        //九宫格效果
-            UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, kImageWidth*2-20)];
-            image.center = CGPointMake(SCREEN_WIDTH/2, kImageWidth);
-            image.image = [UIImage imageNamed:@"maintablepic1"];
-            [cell addSubview:image];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if (![cell.contentView viewWithTag:1]) {
+        UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, kImageWidth*2-20)];
+        image.center = CGPointMake(SCREEN_WIDTH/2, kImageWidth);
+        image.clipsToBounds = YES;
+        image.image = [UIImage imageNamed:@"maintablepic1"];
+        image.tag = 1;
+        [cell.contentView addSubview:image];
     }
     return cell;
 }

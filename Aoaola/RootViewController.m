@@ -339,7 +339,7 @@ static float gap = 8;
         }
         return;
     }
-    productSearchView = [[ProductSearchTableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame)+44, self.view.width, self.view.height-history.y)];
+    productSearchView = [[ProductSearchTableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame)+44, self.view.width, self.view.height-64-44)];
     productSearchView.alpha = 0;
     [self.view insertSubview:productSearchView atIndex:1];
     [productSearchView search:searchField.text];
@@ -361,7 +361,7 @@ static float gap = 8;
         }
         return;
     }
-    elementSearchView = [[ElementsSearchTableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame)+44, self.view.width, self.view.height-history.y)];
+    elementSearchView = [[ElementsSearchTableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame)+44, self.view.width, self.view.height-64-44)];
     elementSearchView.alpha = 0;
     [self.view insertSubview:elementSearchView atIndex:1];
     [elementSearchView search:searchField.text];
