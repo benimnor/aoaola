@@ -27,25 +27,23 @@ static NSString *cellIdentifier = @"SearchInfoViewCell";
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame style:UITableViewStylePlain];
     if (self) {
+        currentKey = @"";
         _cateType = 9;
         self.delegate = self;
         self.dataSource = self;
         self.backgroundColor = UIColorFromHex(0xF7F7F7);
         productDatas = [[NSMutableArray alloc] init];
-        for (NSInteger i=0; i<10; i++) {
-            [productDatas addObject:@"1"];
-        }
         
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
         footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen screenWidth], 40)];
         footerActivityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         footerActivityView.frame = footerView.bounds;
-        footerActivityView.hidden = YES;
+        [footerActivityView startAnimating];
+        footerActivityView.hidesWhenStopped = YES;
         [footerView addSubview:footerActivityView];
         self.tableFooterView = footerView;
         
-        UINib *nib=[UINib nibWithNibName:@"SearchInfoViewCell" bundle:nil ];
-        [self registerNib:nib forCellReuseIdentifier:cellIdentifier];
+        [self registerClass:[SearchInfoViewCell class] forCellReuseIdentifier:cellIdentifier];
 
     }
     return self;
@@ -56,11 +54,35 @@ static NSString *cellIdentifier = @"SearchInfoViewCell";
 }
 
 - (void)search:(NSString *)key{
+    if (key.length<=0&&productDatas.count<=0) {
+        [self loadData];
+        return;
+    }
     if ([currentKey isEqualToString:key]) {
         return;
     }
     currentKey = key;
-    NSLog(@"搜索分类%ld的产品%@", _cateType, currentKey);
+    [self loadData];
+}
+
+- (void)loadData{
+    [ALRequest requestPOSTAPI:@"search/productNew"
+                     postData:@{@"searchKey": currentKey,
+                                @"offsetIndex": @(0),
+                                @"pageSize": @(PAGESIZE),
+                                @"cateType": @(_cateType)}
+                      success:^(id result) {
+                          [productDatas removeAllObjects];
+                          NSArray *temp = result[@"pager"][@"content"];
+                          [productDatas addObjectsFromArray:temp];
+                          [self reloadData];
+                          if (footerActivityView) {
+                              footerActivityView.hidden = YES;
+                              [footerActivityView stopAnimating];
+                          }
+                      }
+                       failed:^(id result, NSError *error) {
+                       }];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -72,39 +94,50 @@ static NSString *cellIdentifier = @"SearchInfoViewCell";
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 164;
+    return 160;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     SearchInfoViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
-    cell.tag = indexPath.row;
-//    cell.delegate = self;
-    cell.titleLabel.text = @"珂润润浸保湿滋养乳霜珂润润浸保湿滋养乳霜";
-    cell.titleLabel.adjustsFontSizeToFitWidth = YES;
-    cell.functionLabel.text = @"保湿  抗氧化";
-    cell.levelLabel.text = @"国产备案";
+    cell.data = productDatas[indexPath.row];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    ProductDetailViewController *detail  = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:nil];
+    ProductDetailViewController *detail  = [[ProductDetailViewController alloc] initWithData:productDatas[indexPath.row]];
     [(UINavigationController *)[UIApplication appDelegate].window.rootViewController pushViewController:detail animated:YES];
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row==productDatas.count-1) {
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.contentOffset.y>=scrollView.contentSize.height-scrollView.height) {
         if (footerActivityView.hidden&&!endLogo) {
             [footerActivityView startAnimating];
             footerActivityView.hidden = NO;
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [footerActivityView removeFromSuperview];
-                endLogo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navi_logo"]];
-                if (endLogo.height>20) {
-                    endLogo.bounds = CGRectMake(0, 0, 20, 20);
+            [ALRequest requestPOSTAPI:@"search/productNew"
+                             postData:@{@"offsetIndex": @(productDatas.count),
+                                        @"pageSize": @(PAGESIZE),
+                                        @"cateType": @(_cateType)}
+                              success:^(id result) {
+                [footerActivityView stopAnimating];
+                footerActivityView.hidden = YES;
+                NSArray *temp = result[@"pager"][@"content"];
+                if (temp&&temp.count>0) {
+                    [productDatas addObjectsFromArray:temp];
+                    CGPoint offsetPoint = self.contentOffset;
+                    [self reloadData];
+                    [self setContentOffset:offsetPoint];
+                } else {
+                    endLogo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navi_logo"]];
+                    if (endLogo.height>20) {
+                        endLogo.bounds = CGRectMake(0, 0, 20, 20);
+                    }
+                    endLogo.center = CGPointMake(footerView.width/2, footerView.height/2);
+                    [footerView addSubview:endLogo];
                 }
-                endLogo.center = CGPointMake(footerView.width/2, footerView.height/2);
-                [footerView addSubview:endLogo];
-            });
+            } failed:^(id result, NSError *error) {
+                [footerActivityView stopAnimating];
+                footerActivityView.hidden = YES;
+            }];
         }
     }
 }

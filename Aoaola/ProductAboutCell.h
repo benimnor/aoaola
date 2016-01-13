@@ -13,5 +13,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *nicknameLabel;
 @property (strong, nonatomic) IBOutlet UILabel *casLabel;
 @property (strong, nonatomic) IBOutlet UITextView *contentLabel;
+@property (nonatomic, weak) NSDictionary *data;
 
 @end

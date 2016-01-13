@@ -10,4 +10,6 @@
 
 @interface ElementsTableViewCell : UITableViewCell
 
+@property (nonatomic, weak) NSDictionary *data;
+
 @end

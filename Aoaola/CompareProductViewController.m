@@ -48,7 +48,7 @@ static NSString *cellIdentifier = @"cellIdentifier";
     _scrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:_scrollView];
     
-    for (NSInteger i=1; i<=5; i++) {
+    for (NSInteger i=1; i<=[UIApplication appDelegate].compareDatas.count; i++) {
         UITableView *valueTableView = [[UITableView alloc] initWithFrame:CGRectMake(kValueTableWidth*(i-1), 0, kValueTableWidth, _scrollView.height) style:UITableViewStylePlain];
         valueTableView.delegate = self;
         valueTableView.dataSource = self;
@@ -61,6 +61,13 @@ static NSString *cellIdentifier = @"cellIdentifier";
         if (i==5) {
             [valueTableView addLine:COLOR_APP_LIGHTGRAY frame:CGRectMake(kValueTableWidth-.5, 0, .5, temp)];
         }
+//        [ALRequest requestPOSTAPI:@"productNew/getById" postData:@{@"id": productInfo[@"id"]} success:^(id result) {
+//            NSArray *temp = result[@"obj"][@"elements"];
+//            if (temp&&temp.count>0) {
+//            }
+//        } failed:^(id result, NSError *error) {
+//        }];
+//
     }
     
     UITableView *titleTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, _scrollView.y , kTableWidth, _scrollView.height) style:UITableViewStylePlain];

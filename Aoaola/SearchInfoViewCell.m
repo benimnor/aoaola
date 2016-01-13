@@ -10,26 +10,97 @@
 #import "AdditionsMacro.h"
 #import "ProductDetailViewController.h"
 
-@implementation SearchInfoViewCell
-
-- (void)awakeFromNib {
-    // Initialization code
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
-    
+@implementation SearchInfoViewCell {
+    UIImageView *iconView;
+    UILabel *titleLabel;
+    UILabel *effectLabel;
+    UILabel *functionLabel;
+    UIButton *showDetailBtn;
+    UIButton *compareBtn;
+    UIView *overlayView;
 }
 
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
+        float gap = 15;
+        iconView = [[UIImageView alloc] initWithFrame:CGRectMake(gap, gap, 80, 80)];
+        iconView.contentMode = UIViewContentModeScaleAspectFit;
+        [self.contentView addSubview:iconView];
+        
+        titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(iconView.frame)+10, gap, SCREEN_WIDTH-CGRectGetMaxX(iconView.frame)-10-gap, 10)];
+        titleLabel.textColor = [UIColor blackColor];
+        titleLabel.font = [UIFont systemFontOfSize:17];
+        titleLabel.numberOfLines = 2;
+        titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        titleLabel.adjustsFontSizeToFitWidth = YES;
+        [self.contentView addSubview:titleLabel];
+        
+        effectLabel = [[UILabel alloc] initWithFrame:CGRectMake(titleLabel.x, CGRectGetMaxY(iconView.frame)-16, titleLabel.width*.7, 16)];
+        effectLabel.textColor = COLOR_APP_GRAY;
+        effectLabel.font = [UIFont systemFontOfSize:15];
+        effectLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        [self.contentView addSubview:effectLabel];
+        
+        functionLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-titleLabel.width*.3-gap, effectLabel.y, titleLabel.width*.3, 16)];
+        functionLabel.textColor = COLOR_APP_PINK;
+        functionLabel.font = [UIFont systemFontOfSize:15];
+        functionLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        functionLabel.textAlignment = NSTextAlignmentRight;
+        [self.contentView addSubview:functionLabel];
+        
+        [self.contentView addLine:COLOR_APP_WHITE frame:CGRectMake(0, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH, .5)];
+        compareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [compareBtn setTitleColor:COLOR_APP_GRAY forState:UIControlStateNormal];
+        [compareBtn setTitleColor:APP_COLOR forState:UIControlStateSelected];
+        compareBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+        [compareBtn setTitle:@"添加对比" forState:UIControlStateNormal];
+        [compareBtn setTitle:@"已添加" forState:UIControlStateSelected];
+        [compareBtn addTarget:self action:@selector(compareAction:) forControlEvents:UIControlEventTouchUpInside];
+        compareBtn.frame = CGRectMake(0, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH, 35);
+        [self.contentView addSubview:compareBtn];
+        if (![reuseIdentifier isEqualToString:@"SearchInfoViewCell2"]) {
+            compareBtn.frame = CGRectMake(SCREEN_WIDTH/2, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH/2, 35);
+            [self.contentView addLine:COLOR_APP_WHITE frame:CGRectMake(SCREEN_WIDTH/2, CGRectGetMaxY(iconView.frame)+gap, .5, compareBtn.height)];
+            showDetailBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [showDetailBtn setTitleColor:COLOR_APP_GRAY forState:UIControlStateNormal];
+            showDetailBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+            [showDetailBtn setTitleColor:APP_COLOR forState:UIControlStateHighlighted];
+            [showDetailBtn setTitle:@"查看成分" forState:UIControlStateNormal];
+            [showDetailBtn addTarget:self action:@selector(compareAction:) forControlEvents:UIControlEventTouchUpInside];
+            showDetailBtn.frame = CGRectMake(0, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH/2, compareBtn.height);
+            [self.contentView addSubview:showDetailBtn];
+        }
+        [self.contentView addLine:COLOR_APP_WHITE frame:CGRectMake(0, gap+iconView.height+gap+compareBtn.height, SCREEN_WIDTH, 15)];
+    }
+    return self;
 }
+
+- (void)setData:(NSDictionary *)data{
+    _data = data;
+    titleLabel.text = data[@"name"];
+    effectLabel.text = data[@"effect"];
+    if (effectLabel.text.length<=0) {
+        effectLabel.text = @"暂无";
+    }
+    functionLabel.text = data[@"src"];
+    NSString *imgSrc = data[@"img"];
+    if (imgSrc.length>0) {
+        [iconView sd_setImageWithURL:[NSURL URLWithString:imgSrc]];
+    } else {
+        iconView.image = [UIImage imageNamed:@"unknow"];
+    }
+    titleLabel.height = [titleLabel sizeThatFits:CGSizeMake(titleLabel.width, CGFLOAT_MAX)].height;
+}
+
 - (IBAction)compareAction:(UIButton *)sender {
     if (sender.isSelected) {
         [sender setSelected:NO];
         [[UIApplication appDelegate].compareDatas removeLastObject];
     }else{
-        [[UIApplication appDelegate].compareDatas addObject:@"1"];
+        [[UIApplication appDelegate].compareDatas addObject:_data];
         [sender setSelected:YES];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:kRefrushCompareNum object:nil];
@@ -38,5 +109,39 @@
 - (IBAction)showCompositionView:(id)sender {
     ProductDetailViewController *detail  = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:nil];
     [(UINavigationController *)[UIApplication appDelegate].window.rootViewController pushViewController:detail animated:YES];
+}
+
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
+    [super setHighlighted:highlighted animated:animated];
+    [self highlight:highlighted animated:animated];
+}
+
+- (void)highlight:(BOOL)highlighted animated:(BOOL)animated{
+    if (highlighted) {
+        if (overlayView) {
+            [overlayView removeFromSuperview];
+            overlayView = nil;
+        }
+        overlayView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen screenWidth], self.height-15)];
+        overlayView.backgroundColor = [APP_COLOR colorWithAlphaComponent:.2];
+        [self.contentView addSubview:overlayView];
+    } else {
+        [self cancel];
+    }
+}
+
+
+- (void)cancel{
+    if (!overlayView) {
+        overlayView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen screenWidth], (CELL_HEIGHT+58)-15)];
+        overlayView.backgroundColor = [APP_COLOR colorWithAlphaComponent:.2];
+        [self.contentView addSubview:overlayView];
+    }
+    [UIView animateWithDuration:.2 animations:^{
+        overlayView.alpha = 0;
+    } completion:^(BOOL finished) {
+        [overlayView removeFromSuperview];
+        overlayView = nil;
+    }];
 }
 @end

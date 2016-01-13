@@ -8,14 +8,14 @@
 
 #import "RootViewController.h"
 #import "Utils.h"
-#import "MainViewController.h"
 #import "SearchHistoryView.h"
 #import "ProductSearchTableView.h"
 #import "ElementsSearchTableView.h"
 #import "CompareProductViewController.h"
+#import "ProductDiscoverViewController.h"
 
 static float gap = 8;
-@interface RootViewController () <UITextFieldDelegate, SearchHistoryDelegate, MainViewDelegate>
+@interface RootViewController () <UITextFieldDelegate, SearchHistoryDelegate, ProductDiscoverDelegate>
 
 @end
 
@@ -31,14 +31,21 @@ static float gap = 8;
     UIView *segContnet;
     UISegmentedControl *segControl;
     CGSize keyboardSize;
-    MainViewController *mainView;
+    ProductDiscoverViewController *mainView;
     ProductSearchTableView *productSearchView;
     ElementsSearchTableView *elementSearchView;
+    NSInteger currentIndex;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    {//用于解决不同版本的iOS对ScrollView的contentInset支持不统一的问题
+        self.extendedLayoutIncludesOpaqueBars = YES;
+        self.automaticallyAdjustsScrollViewInsets = NO;
+        self.edgesForExtendedLayout = UIRectEdgeAll;
+    }
+
     self.view.backgroundColor = [UIColor whiteColor];
     
     searchView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, self.navigationController.navigationBar.height)];
@@ -67,9 +74,9 @@ static float gap = 8;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startSearch)];
     [contentView addGestureRecognizer:tap];
     
-    mainView = [[MainViewController alloc] init];
-    mainView.delegate = self;
-    mainView.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    mainView = [[ProductDiscoverViewController alloc] init];
+    mainView.view.frame = CGRectMake(0, 64, self.view.width, SCREEN_HEIGHT-64);
+    mainView.cateDelegate = self;
     [self addChildViewController:mainView];
     [self.view addSubview:mainView.view];
     
@@ -199,6 +206,14 @@ static float gap = 8;
 }
 
 - (void)changeType{
+    if (searchField.text.length<=0) {
+        if (segControl.selectedSegmentIndex==0) {
+            NSArray *titleStrArr = @[@"洁面",@"乳液",@"面霜",@"精华",@"化妆水",@"面膜",@"防晒",@"卸妆",@""];
+            searchField.placeholder = [NSString stringWithFormat:@"搜索%@", titleStrArr[currentIndex-1]];
+        } else {
+            searchField.placeholder = @"搜索成分";
+        }
+    }
     if ([searchField isFirstResponder]) {
         if (history) {
             history.type = segControl.selectedSegmentIndex;
@@ -206,7 +221,7 @@ static float gap = 8;
         return;
     }
     if (segControl.selectedSegmentIndex==0&&!productSearchView) {
-        [self showProductList];
+        [self showProductList:-1];
         return;
     }
     if (segControl.selectedSegmentIndex==1&&!elementSearchView) {
@@ -259,6 +274,7 @@ static float gap = 8;
 }
 
 - (void)cancelSearch{
+    searchField.placeholder = @"搜索";
     mainView.view.hidden = NO;
     searchField.text = @"";
     [searchField resignFirstResponder];
@@ -317,7 +333,7 @@ static float gap = 8;
     [self closeHistory];
     [textField resignFirstResponder];
     if (segControl.selectedSegmentIndex==0) {
-        [self showProductList];
+        [self showProductList:-1];
     } else {
         [self showElementList];
     }
@@ -325,13 +341,15 @@ static float gap = 8;
 }
 
 - (void)didChoiceCate:(NSInteger)index{
-    productSearchView.cateType = index;
+    currentIndex = index;
+    NSArray *titleStrArr = @[@"洁面",@"乳液",@"面霜",@"精华",@"化妆水",@"面膜",@"防晒",@"卸妆",@""];
+    searchField.placeholder = [NSString stringWithFormat:@"搜索%@", titleStrArr[index-1]];
     [self showCancelBtn];
     [self addSeg];
-    [self showProductList];
+    [self showProductList:index];
 }
 
-- (void)showProductList{
+- (void)showProductList:(NSInteger)type{
     if (productSearchView) {
         [productSearchView search:searchField.text];
         if (productSearchView.alpha==0) {
@@ -341,6 +359,9 @@ static float gap = 8;
     }
     productSearchView = [[ProductSearchTableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame)+44, self.view.width, self.view.height-64-44)];
     productSearchView.alpha = 0;
+    if (type!=-1) {
+        productSearchView.cateType = type;
+    }
     [self.view insertSubview:productSearchView atIndex:1];
     [productSearchView search:searchField.text];
     [UIView animateWithDuration:.3 animations:^{
@@ -379,15 +400,13 @@ static float gap = 8;
         [self closeHistory];
         [searchField resignFirstResponder];
     }
-    if (segControl.selectedSegmentIndex==0&&!productSearchView) {
-        [self showProductList];
-        return;
-    }
-    if (segControl.selectedSegmentIndex==1&&!elementSearchView) {
-        [self showElementList];
-        return;
-    }
     [UIView animateWithDuration:.3 animations:^{
+        if (segControl.selectedSegmentIndex==0) {
+            [self showProductList:-1];
+        }
+        if (segControl.selectedSegmentIndex==1) {
+            [self showElementList];
+        }
         elementSearchView.alpha = segControl.selectedSegmentIndex==1;
         productSearchView.alpha = segControl.selectedSegmentIndex==0;
     }];

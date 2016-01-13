@@ -10,5 +10,7 @@
 
 
 @interface ProductDetailViewController : UITableViewController
+
+- (instancetype)initWithData:(NSDictionary *)data;
 @property (strong, nonatomic) UIView *moveLine;
 @end

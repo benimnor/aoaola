@@ -16,15 +16,16 @@
 #import "UIAlertView+Additions.h"
 #import "NSString+Additions.h"
 #import "NSDate+Additions.h"
-//#import "MBProgressHUD.h"
+#import "MBProgressHUD.h"
 #import "UIImage+StackBlur.h"
 //#import "AALActionSheet.h"
 //#import "JFImagePickerController.h"
 #import "NSObject+Additions.h"
 //#import "AALHelper.h"
-//#import "AALRequest.h"
+#import "AALRequest.h"
 //#import "MGNavigationController.h"
 //#import "NSDate+TimeAgo.h"
+#import "UIImageView+WebCache.h"
 
 
 #define DATA_PATH [DOCUMENT_DIR stringByAppendingPathComponent:@"localData"]
@@ -55,7 +56,7 @@
 #define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)
 #define SCREEN_HEIGHT ([UIScreen mainScreen].bounds.size.height)
 #define NAVIGATIONBAR_HEIGHT (self.navigationController.navigationBar.height)
-#define CELL_HEIGHT 44
+#define CELL_HEIGHT ([UIScreen screenWidth]/16*9)
 #define COLOR(r,g,b,a) [UIColor colorWithFullRed:r green:g blue:b alpha:a]
 #define APP_COLOR [UIColor colorWithFullRed:8 green:199 blue:180 alpha:1]
 #define PINK_COLOR [UIColor colorWithFullRed:244 green:71 blue:136 alpha:1]

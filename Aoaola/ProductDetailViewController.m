@@ -9,12 +9,11 @@
 #import "ProductDetailViewController.h"
 #import "AdditionsMacro.h"
 #import "Utils.h"
-#import "ProductAboutViewController.h"
+#import "ElementDetailViewController.h"
 #import "ProductDetailView.h"
 #import "CompareProductViewController.h"
 #import "SearchInfoViewCell.h"
 #import "ElementsTableViewCell.h"
-
 #define kCompositionHeight 60
 #define kCompositionValueHeight 44
 static NSString *cellIdentifier = @"SearchInfoViewCell2";
@@ -31,6 +30,24 @@ static NSString *elementCellIdentifier = @"elementCellIdentifier";
     UIImageView *endLogo;
     UIView *footerView;
     NSMutableArray *datas;
+    NSDictionary *productInfo;
+    NSMutableArray *yunfuArr;
+    NSMutableArray *meibaiArr;
+    NSMutableArray *ganguangArr;
+    NSMutableArray *kanglaoArr;
+    NSMutableArray *gaoweiArr;
+    NSMutableArray *baoshiArr;
+    float realSafeLevel;
+    NSString *descString;
+    NSMutableArray *listDatas;
+}
+
+- (instancetype)initWithData:(NSDictionary *)data{
+    self = [super initWithNibName:@"ProductDetailViewController" bundle:nil];
+    if (self) {
+        productInfo = [data copy];
+    }
+    return self;
 }
 
 - (void)viewDidLoad {
@@ -41,10 +58,15 @@ static NSString *elementCellIdentifier = @"elementCellIdentifier";
     
     self.tableView.backgroundColor = UIColorFromHex(0xF7F7F7);
     datas = [[NSMutableArray alloc] init];
-    for (NSInteger i=0; i<20; i++) {
-        [datas addObject:@""];
-    }
+    yunfuArr = [[NSMutableArray alloc] init];
+    meibaiArr = [[NSMutableArray alloc] init];
+    ganguangArr = [[NSMutableArray alloc] init];
+    kanglaoArr = [[NSMutableArray alloc] init];
+    gaoweiArr = [[NSMutableArray alloc] init];
+    baoshiArr = [[NSMutableArray alloc] init];
 
+    listDatas = [[NSMutableArray alloc] initWithObjects:datas, yunfuArr, meibaiArr, ganguangArr, kanglaoArr, gaoweiArr, baoshiArr, nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refrushCompareNum) name:kRefrushCompareNum object:nil];
     
     compareNumView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 50, self.navigationController.navigationBar.height)];
@@ -71,11 +93,12 @@ static NSString *elementCellIdentifier = @"elementCellIdentifier";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:compareNumView];
     
 //    self.tableView.tableHeaderView = headerView;
-    [self.tableView registerNib:[UINib nibWithNibName:@"SearchInfoViewCell2" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+    [self.tableView registerClass:[SearchInfoViewCell class] forCellReuseIdentifier:cellIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:@"ProductDetailView" bundle:nil] forCellReuseIdentifier:detailCellIdentifier];
     [self.tableView registerClass:[ElementsTableViewCell class] forCellReuseIdentifier:elementCellIdentifier];
 
     footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen screenWidth], 40)];
+    [footerView addLine:[UIColor whiteColor] frame:CGRectMake(0, 0, self.view.width, .5)];
     endLogo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navi_logo"]];
     if (endLogo.height>20) {
         endLogo.bounds = CGRectMake(0, 0, 20, 20);
@@ -86,6 +109,70 @@ static NSString *elementCellIdentifier = @"elementCellIdentifier";
     self.tableView.tableFooterView = footerView;
 
     [self refrushCompareNum];
+    
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.tintColor = APP_COLOR;
+    [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refreshControl;
+    [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+    [self refresh:nil];
+}
+
+- (void)refresh:(UIRefreshControl *)refreshControl{
+    [ALRequest requestPOSTAPI:@"productNew/getById" postData:@{@"id": productInfo[@"id"]} success:^(id result) {
+        NSArray *temp = result[@"obj"][@"elements"];
+        NSLog(@"%@", temp);
+        if (temp&&temp.count>0) {
+            NSInteger totalSafeLevel = 0;
+            BOOL zhidou = NO;
+            for (NSDictionary *dict in temp) {
+                BOOL baoshi = [dict[@"baoshi"] boolValue];
+                BOOL yunfu = [dict[@"yunfu"] boolValue];
+                BOOL meibai = [dict[@"meibai"] boolValue];
+                BOOL kanglao = [dict[@"kanglao"] boolValue];
+                BOOL gaowei = [dict[@"gaowei"] boolValue];
+                BOOL ganguang = [dict[@"baoshi"] boolValue];
+                if ([dict[@"zhidou"] boolValue]) {
+                    zhidou = YES;
+                }
+                NSInteger safeLevel = [dict[@"safeLevel"] integerValue];
+                totalSafeLevel += safeLevel;
+                if (baoshi) {
+                    [baoshiArr addObject:dict];
+                }
+                if (yunfu) {
+                    [yunfuArr addObject:dict];
+                }
+                if (meibai) {
+                    [meibaiArr addObject:dict];
+                }
+                if (kanglao) {
+                    [kanglaoArr addObject:dict];
+                }
+                if (gaowei) {
+                    [gaoweiArr addObject:dict];
+                }
+                if (ganguang) {
+                    [ganguangArr addObject:dict];
+                }
+                [datas addObject:dict];
+            }
+            realSafeLevel = totalSafeLevel/(float)temp.count;
+            NSString *tempStr = [NSString stringWithFormat:@"%@%@",zhidou?@"有致逗风险。":@"",
+                              yunfuArr.count>0?@"不建议孕妇使用该产品。":@""];
+            if (tempStr.length<=0) {
+                tempStr = @"👍";
+            }
+            descString = [NSString stringWithFormat:@"该产品共包含 %ld 种成分，危险指数平均值为 %.1f\n%@",
+                          temp.count, realSafeLevel,tempStr];
+            [self.tableView reloadData];
+        }
+        [refreshControl endRefreshing];
+        [MBProgressHUD hideAllHUDsForView:self.navigationController.view animated:YES];
+    } failed:^(id result, NSError *error) {
+        [refreshControl endRefreshing];
+        [MBProgressHUD hideAllHUDsForView:self.navigationController.view animated:YES];
+    }];
 }
 
 - (void)refrushCompareNum{
@@ -107,18 +194,10 @@ static NSString *elementCellIdentifier = @"elementCellIdentifier";
     // Dispose of any resources that can be recreated.
 }
 
-- (void)showProductAbout:(UIButton *)sender{
-    ProductAboutViewController *about = [[ProductAboutViewController alloc] initWithNibName:@"ProductAboutViewController" bundle:nil];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] init];
-    backItem.title = @"";
-    self.navigationItem.backBarButtonItem = backItem;
-    [self.navigationController pushViewController:about animated:YES];
-}
-
-
 #pragma mark - Table view data source
 
 - (void)selectComposition:(UIButton *)btn{
+    _moveLine.tag = btn.tag;
     [UIView animateWithDuration:.3 delay:0 usingSpringWithDamping:.8 initialSpringVelocity:.8 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         _moveLine.center = CGPointMake(btn.center.x, _moveLine.center.y);
     } completion:nil];
@@ -130,16 +209,28 @@ static NSString *elementCellIdentifier = @"elementCellIdentifier";
         UIView *selectCompositionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, kCompositionHeight)];
         selectCompositionView.backgroundColor = [UIColor whiteColor];
         
-        for (NSInteger i=0; i<7; i++) {
+        NSArray *titles = @[@"全部成分", @"孕妇禁用", @"美白成分", @"感光成分", @"抗老成分", @"高危成分", @"保湿成分"];
+        for (NSInteger i=0; i<titles.count; i++) {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             button.frame = CGRectMake((SCREEN_WIDTH/7)*i, 3, SCREEN_WIDTH/7, kCompositionHeight-3);
-            NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:@"全部\n成分\n\n15" attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:11], NSForegroundColorAttributeName: COLOR_APP_GRAY}];
+            NSString *title = titles[i];
+            NSArray *tempArr = listDatas[i];
+            NSString *str = [NSString stringWithFormat:@"%@\n%@\n\n%ld", [title substringWithRange:NSMakeRange(0, 2)], [title substringWithRange:NSMakeRange(2, 2)], tempArr.count];
+            NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:str attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:11], NSForegroundColorAttributeName: UIColorFromHex(0x8F8F8F)}];
             [attri addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:4] range:NSMakeRange(5, 2)];
             [button setAttributedTitle:attri forState:UIControlStateNormal];
+            {
+                NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:str attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:11], NSForegroundColorAttributeName: UIColorFromHex(0xC6C6C6)}];
+                [attri addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:4] range:NSMakeRange(5, 2)];
+                [button setAttributedTitle:attri forState:UIControlStateDisabled];
+            }
             button.titleLabel.numberOfLines = 4;
             button.titleLabel.textAlignment = NSTextAlignmentCenter;
             button.titleLabel.font = [UIFont systemFontOfSize:11];
             button.tag = i;
+            if (tempArr.count<=0) {
+                button.enabled = NO;
+            }
             [button addTarget:self action:@selector(selectComposition:) forControlEvents:UIControlEventTouchUpInside];
             [selectCompositionView addSubview:button];
             
@@ -223,14 +314,15 @@ static NSString *elementCellIdentifier = @"elementCellIdentifier";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section==0) {
-        return 164;
+        return 160;
     }
-    return 44;
+    return 60;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section==1) {
-        ProductAboutViewController *detail  = [[ProductAboutViewController alloc] initWithNibName:@"ProductAboutViewController" bundle:nil];
+        NSArray *tempArr = listDatas[_moveLine.tag];
+        ElementDetailViewController *detail  = [[ElementDetailViewController alloc] initWithData:tempArr[indexPath.row]];
         [(UINavigationController *)[UIApplication appDelegate].window.rootViewController pushViewController:detail animated:YES];
     }
 }
@@ -239,17 +331,25 @@ static NSString *elementCellIdentifier = @"elementCellIdentifier";
     if (indexPath.section==0) {
         if (indexPath.row==0) {
             SearchInfoViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
-            cell.titleLabel.text = @"珂润润浸保湿滋养乳霜珂润润浸保湿滋养乳霜";
-            cell.titleLabel.adjustsFontSizeToFitWidth = YES;
-            cell.functionLabel.text = @"保湿  抗氧化";
-            cell.levelLabel.text = @"国产备案";
+            cell.data = productInfo;
             return cell;
         } else if (indexPath.row==1) {
             ProductDetailView *detail = [tableView dequeueReusableCellWithIdentifier:detailCellIdentifier forIndexPath:indexPath];
+            if (realSafeLevel>=3) {
+                detail.scoreLabel.textColor = UIColorFromHex(0xFFA845);
+            } else if (realSafeLevel>=4) {
+                detail.scoreLabel.textColor = UIColorFromHex(0xFF4545);
+            } else {
+                detail.scoreLabel.textColor = APP_COLOR;
+            }
+            detail.scoreLabel.text = [NSString stringWithFormat:@"%.1f", realSafeLevel];
+            detail.descLabel.text = descString;
             return detail;
         }
     }
+    NSArray *tempArr = listDatas[_moveLine.tag];
     ElementsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:elementCellIdentifier forIndexPath:indexPath];
+    cell.data = tempArr[indexPath.row];
     return cell;
 }
 

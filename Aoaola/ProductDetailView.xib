@@ -8,22 +8,23 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="productDetailCell" rowHeight="156" id="UlW-qG-Hkt" customClass="ProductDetailView">
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="productDetailCell" rowHeight="384" id="UlW-qG-Hkt" customClass="ProductDetailView">
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UlW-qG-Hkt" id="pJE-qT-SpR">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sBy-dh-AiJ">
                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="该产品共包含15种成分，危险指数平均值为2.6（最高5）有致痘风险。不建议孕妇使用该产品。" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hph-Fn-YR2">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="未知" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hph-Fn-YR2">
                                 <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2.6" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YTC-Dc-pIr">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="N/A" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YTC-Dc-pIr">
                                 <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="58"/>
                                 <color key="textColor" red="0.031372549020000001" green="0.78039215689999997" blue="0.70588235290000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -39,7 +40,7 @@
                             <constraint firstItem="Hph-Fn-YR2" firstAttribute="leading" secondItem="sBy-dh-AiJ" secondAttribute="leading" constant="22" id="cDh-Rz-EIJ"/>
                             <constraint firstItem="Hph-Fn-YR2" firstAttribute="top" secondItem="YTC-Dc-pIr" secondAttribute="bottom" constant="13" id="pcm-fV-qBp"/>
                             <constraint firstAttribute="bottom" secondItem="Hph-Fn-YR2" secondAttribute="bottom" constant="9" id="uw0-Id-wni">
-                                <variation key="heightClass=regular-widthClass=compact" constant="7"/>
+                                <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
                             </constraint>
                         </constraints>
                         <variation key="default">
@@ -48,13 +49,13 @@
                                 <exclude reference="YTC-Dc-pIr"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="5V3-MI-eIR"/>
-                                <exclude reference="OIE-GF-s9A"/>
-                                <exclude reference="V3o-L2-oMd"/>
                                 <exclude reference="Asc-H5-vGA"/>
                                 <exclude reference="cDh-Rz-EIJ"/>
                                 <exclude reference="pcm-fV-qBp"/>
                                 <exclude reference="uw0-Id-wni"/>
+                                <exclude reference="5V3-MI-eIR"/>
+                                <exclude reference="OIE-GF-s9A"/>
+                                <exclude reference="V3o-L2-oMd"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -63,20 +64,20 @@
                                 <include reference="YTC-Dc-pIr"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="5V3-MI-eIR"/>
-                                <include reference="OIE-GF-s9A"/>
-                                <include reference="V3o-L2-oMd"/>
                                 <include reference="Asc-H5-vGA"/>
                                 <include reference="cDh-Rz-EIJ"/>
                                 <include reference="pcm-fV-qBp"/>
                                 <include reference="uw0-Id-wni"/>
+                                <include reference="5V3-MI-eIR"/>
+                                <include reference="OIE-GF-s9A"/>
+                                <include reference="V3o-L2-oMd"/>
                             </mask>
                         </variation>
                     </view>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottomMargin" secondItem="sBy-dh-AiJ" secondAttribute="bottom" constant="7" id="Jme-qd-ijx">
-                        <variation key="heightClass=regular-widthClass=compact" constant="1"/>
+                        <variation key="heightClass=regular-widthClass=compact" constant="7"/>
                     </constraint>
                     <constraint firstItem="sBy-dh-AiJ" firstAttribute="leading" secondItem="pJE-qT-SpR" secondAttribute="leading" id="NcV-4Q-ICQ"/>
                     <constraint firstItem="sBy-dh-AiJ" firstAttribute="top" secondItem="pJE-qT-SpR" secondAttribute="top" id="QUg-ob-Mbr"/>
@@ -110,7 +111,7 @@
                 <outlet property="descLabel" destination="Hph-Fn-YR2" id="nhe-qK-aNf"/>
                 <outlet property="scoreLabel" destination="YTC-Dc-pIr" id="Dqb-aO-aOw"/>
             </connections>
-            <point key="canvasLocation" x="503" y="541"/>
+            <point key="canvasLocation" x="616" y="532"/>
         </tableViewCell>
     </objects>
 </document>
