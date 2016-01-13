@@ -16,7 +16,7 @@
     UILabel *effectLabel;
     UILabel *functionLabel;
     UIButton *showDetailBtn;
-    UIButton *compareBtn;
+    
     UIView *overlayView;
 }
 
@@ -52,28 +52,28 @@
         [self.contentView addSubview:functionLabel];
         
         [self.contentView addLine:COLOR_APP_WHITE frame:CGRectMake(0, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH, .5)];
-        compareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [compareBtn setTitleColor:COLOR_APP_GRAY forState:UIControlStateNormal];
-        [compareBtn setTitleColor:APP_COLOR forState:UIControlStateSelected];
-        compareBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-        [compareBtn setTitle:@"添加对比" forState:UIControlStateNormal];
-        [compareBtn setTitle:@"已添加" forState:UIControlStateSelected];
-        [compareBtn addTarget:self action:@selector(compareAction:) forControlEvents:UIControlEventTouchUpInside];
-        compareBtn.frame = CGRectMake(0, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH, 35);
-        [self.contentView addSubview:compareBtn];
+        _compareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_compareBtn setTitleColor:COLOR_APP_GRAY forState:UIControlStateNormal];
+        [_compareBtn setTitleColor:APP_COLOR forState:UIControlStateSelected];
+        _compareBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+        [_compareBtn setTitle:@"添加对比" forState:UIControlStateNormal];
+        [_compareBtn setTitle:@"已添加" forState:UIControlStateSelected];
+        [_compareBtn addTarget:self action:@selector(compareAction:) forControlEvents:UIControlEventTouchUpInside];
+        _compareBtn.frame = CGRectMake(0, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH, 35);
+        [self.contentView addSubview:_compareBtn];
         if (![reuseIdentifier isEqualToString:@"SearchInfoViewCell2"]) {
-            compareBtn.frame = CGRectMake(SCREEN_WIDTH/2, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH/2, 35);
-            [self.contentView addLine:COLOR_APP_WHITE frame:CGRectMake(SCREEN_WIDTH/2, CGRectGetMaxY(iconView.frame)+gap, .5, compareBtn.height)];
+            _compareBtn.frame = CGRectMake(SCREEN_WIDTH/2, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH/2, 35);
+            [self.contentView addLine:COLOR_APP_WHITE frame:CGRectMake(SCREEN_WIDTH/2, CGRectGetMaxY(iconView.frame)+gap, .5, _compareBtn.height)];
             showDetailBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             [showDetailBtn setTitleColor:COLOR_APP_GRAY forState:UIControlStateNormal];
             showDetailBtn.titleLabel.font = [UIFont systemFontOfSize:13];
             [showDetailBtn setTitleColor:APP_COLOR forState:UIControlStateHighlighted];
             [showDetailBtn setTitle:@"查看成分" forState:UIControlStateNormal];
-            [showDetailBtn addTarget:self action:@selector(compareAction:) forControlEvents:UIControlEventTouchUpInside];
-            showDetailBtn.frame = CGRectMake(0, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH/2, compareBtn.height);
+            [showDetailBtn addTarget:self action:@selector(showCompositionView:) forControlEvents:UIControlEventTouchUpInside];
+            showDetailBtn.frame = CGRectMake(0, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH/2, _compareBtn.height);
             [self.contentView addSubview:showDetailBtn];
         }
-        [self.contentView addLine:COLOR_APP_WHITE frame:CGRectMake(0, gap+iconView.height+gap+compareBtn.height, SCREEN_WIDTH, 15)];
+        [self.contentView addLine:COLOR_APP_WHITE frame:CGRectMake(0, gap+iconView.height+gap+_compareBtn.height, SCREEN_WIDTH, 15)];
     }
     return self;
 }
@@ -96,6 +96,7 @@
 }
 
 - (IBAction)compareAction:(UIButton *)sender {
+    NSLog(@"........%ld",sender.tag);
     if (sender.isSelected) {
         [sender setSelected:NO];
         [[UIApplication appDelegate].compareDatas removeLastObject];
@@ -107,7 +108,7 @@
 }
 
 - (IBAction)showCompositionView:(id)sender {
-    ProductDetailViewController *detail  = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:nil];
+    ProductDetailViewController *detail  = [[ProductDetailViewController alloc] initWithData:_data];
     [(UINavigationController *)[UIApplication appDelegate].window.rootViewController pushViewController:detail animated:YES];
 }
 

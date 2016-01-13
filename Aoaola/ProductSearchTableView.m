@@ -98,7 +98,12 @@ static NSString *cellIdentifier = @"SearchInfoViewCell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    SearchInfoViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    NSString *identifier = [NSString stringWithFormat:@"SearchInfoViewCell%ld%ld", [indexPath section], [indexPath row]];
+    SearchInfoViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    if (cell == nil) {
+        cell = [[SearchInfoViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    }
+    
     cell.data = productDatas[indexPath.row];
     return cell;
 }

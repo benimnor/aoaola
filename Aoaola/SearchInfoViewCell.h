@@ -11,5 +11,5 @@
 @interface SearchInfoViewCell : UITableViewCell
 
 @property (nonatomic, weak) NSDictionary *data;
-
+@property (nonatomic, strong) UIButton *compareBtn;
 @end

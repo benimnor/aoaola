@@ -192,10 +192,15 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellId2 = @"SearchInfoViewCell";
-    SearchInfoViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId2 forIndexPath:indexPath];
+    NSString *cellId2 = @"SearchInfoViewCell";
+    SearchInfoViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId2];
+    if (cell == nil) {
+        cell = [[SearchInfoViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId2];
+        cell.compareBtn.tag = indexPath.row+100;
+    }
+
     cell.data = datas[indexPath.row];
-    cell.tag = indexPath.row;
+    
     return cell;
 }
 
