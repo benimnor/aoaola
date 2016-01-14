@@ -31,6 +31,7 @@
 - (void)setFrame:(CGRect)frame{
     [super setFrame:frame];
     _topLine.width = self.width;
+    _bottomLine.width = self.width;
     _bottomLine.y = self.height-.5;
 }
 

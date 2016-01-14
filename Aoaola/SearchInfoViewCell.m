@@ -16,7 +16,7 @@
     UILabel *effectLabel;
     UILabel *functionLabel;
     UIButton *showDetailBtn;
-    
+    UIButton *compareBtn;
     UIView *overlayView;
 }
 
@@ -52,28 +52,28 @@
         [self.contentView addSubview:functionLabel];
         
         [self.contentView addLine:COLOR_APP_WHITE frame:CGRectMake(0, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH, .5)];
-        _compareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_compareBtn setTitleColor:COLOR_APP_GRAY forState:UIControlStateNormal];
-        [_compareBtn setTitleColor:APP_COLOR forState:UIControlStateSelected];
-        _compareBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-        [_compareBtn setTitle:@"添加对比" forState:UIControlStateNormal];
-        [_compareBtn setTitle:@"已添加" forState:UIControlStateSelected];
-        [_compareBtn addTarget:self action:@selector(compareAction:) forControlEvents:UIControlEventTouchUpInside];
-        _compareBtn.frame = CGRectMake(0, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH, 35);
-        [self.contentView addSubview:_compareBtn];
+        compareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [compareBtn setTitleColor:COLOR_APP_GRAY forState:UIControlStateNormal];
+        [compareBtn setTitleColor:APP_COLOR forState:UIControlStateSelected];
+        compareBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+        [compareBtn setTitle:@"添加对比" forState:UIControlStateNormal];
+        [compareBtn setTitle:@"已添加" forState:UIControlStateSelected];
+        [compareBtn addTarget:self action:@selector(compareAction:) forControlEvents:UIControlEventTouchUpInside];
+        compareBtn.frame = CGRectMake(0, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH, 35);
+        [self.contentView addSubview:compareBtn];
         if (![reuseIdentifier isEqualToString:@"SearchInfoViewCell2"]) {
-            _compareBtn.frame = CGRectMake(SCREEN_WIDTH/2, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH/2, 35);
-            [self.contentView addLine:COLOR_APP_WHITE frame:CGRectMake(SCREEN_WIDTH/2, CGRectGetMaxY(iconView.frame)+gap, .5, _compareBtn.height)];
+            compareBtn.frame = CGRectMake(SCREEN_WIDTH/2, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH/2, 35);
+            [self.contentView addLine:COLOR_APP_WHITE frame:CGRectMake(SCREEN_WIDTH/2, CGRectGetMaxY(iconView.frame)+gap, .5, compareBtn.height)];
             showDetailBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             [showDetailBtn setTitleColor:COLOR_APP_GRAY forState:UIControlStateNormal];
             showDetailBtn.titleLabel.font = [UIFont systemFontOfSize:13];
             [showDetailBtn setTitleColor:APP_COLOR forState:UIControlStateHighlighted];
             [showDetailBtn setTitle:@"查看成分" forState:UIControlStateNormal];
             [showDetailBtn addTarget:self action:@selector(showCompositionView:) forControlEvents:UIControlEventTouchUpInside];
-            showDetailBtn.frame = CGRectMake(0, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH/2, _compareBtn.height);
+            showDetailBtn.frame = CGRectMake(0, CGRectGetMaxY(iconView.frame)+gap, SCREEN_WIDTH/2, compareBtn.height);
             [self.contentView addSubview:showDetailBtn];
         }
-        [self.contentView addLine:COLOR_APP_WHITE frame:CGRectMake(0, gap+iconView.height+gap+_compareBtn.height, SCREEN_WIDTH, 15)];
+        [self.contentView addLine:COLOR_APP_WHITE frame:CGRectMake(0, gap+iconView.height+gap+compareBtn.height, SCREEN_WIDTH, 15)];
     }
     return self;
 }
@@ -86,6 +86,7 @@
         effectLabel.text = @"暂无";
     }
     functionLabel.text = data[@"src"];
+    compareBtn.selected = [[UIApplication appDelegate].compareDatas indexOfObject:_data]!=NSNotFound;
     NSString *imgSrc = data[@"img"];
     if (imgSrc.length>0) {
         [iconView sd_setImageWithURL:[NSURL URLWithString:imgSrc]];

@@ -141,6 +141,9 @@ static float gap = 8;
 }
 
 - (void)compare{
+    if ([UIApplication appDelegate].compareDatas.count<=1) {
+        return;
+    }
     CompareProductViewController *compare = [[CompareProductViewController alloc] initWithNibName:@"CompareProductViewController" bundle:nil];
     [self.navigationController pushViewController:compare animated:YES];
 }

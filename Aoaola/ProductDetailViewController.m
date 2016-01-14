@@ -185,6 +185,9 @@ static NSString *elementCellIdentifier = @"elementCellIdentifier";
 }
 
 - (void)showCompareView{
+    if ([UIApplication appDelegate].compareDatas.count<=1) {
+        return;
+    }
     CompareProductViewController *compare = [[CompareProductViewController alloc] initWithNibName:@"CompareProductViewController" bundle:nil];
     [(UINavigationController *)[UIApplication appDelegate].window.rootViewController pushViewController:compare animated:YES];
 }

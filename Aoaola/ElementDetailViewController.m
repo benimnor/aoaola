@@ -168,6 +168,9 @@
 }
 
 - (void)showCompareView{
+    if ([UIApplication appDelegate].compareDatas.count<=1) {
+        return;
+    }
     CompareProductViewController *compare = [[CompareProductViewController alloc] initWithNibName:@"CompareProductViewController" bundle:nil];
     [(UINavigationController *)[UIApplication appDelegate].window.rootViewController pushViewController:compare animated:YES];
 }
@@ -192,15 +195,10 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *cellId2 = @"SearchInfoViewCell";
-    SearchInfoViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId2];
-    if (cell == nil) {
-        cell = [[SearchInfoViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId2];
-        cell.compareBtn.tag = indexPath.row+100;
-    }
-
+    static NSString *cellId2 = @"SearchInfoViewCell";
+    SearchInfoViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId2 forIndexPath:indexPath];
     cell.data = datas[indexPath.row];
-    
+    cell.tag = indexPath.row;
     return cell;
 }
 
